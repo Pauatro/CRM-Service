@@ -1,18 +1,23 @@
 const { env: { SECRET } } = process
 
-const { Router } = require('express')
-const { authenticateUser, confirmSession, registerUser } = require('./handlers')
-const bodyParser = require('body-parser')
+const express = require('express')
+const { Router } = express
+const { authenticateUser, confirmSession, registerUser, deleteUser, retrieveAllUsers, updateUserStatus } = require('./handlers')
 const { jwtVerifierExtractor } = require('../middlewares')
 const { handleError } = require('../helpers')
 
-const parseBody = bodyParser.json()
+const parseBody = express.json()
 const verifyExtractJwt = jwtVerifierExtractor(SECRET, handleError)
 
 const api = new Router()
 
-
 api.post('/users', parseBody, registerUser)
+
+api.get('/users', parseBody, retrieveAllUsers)
+
+api.delete('/users/:id', parseBody, deleteUser)
+
+api.put('/users/:id', parseBody, updateUserStatus)
 
 api.post('/users/auth', parseBody, authenticateUser)
 

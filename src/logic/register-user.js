@@ -1,5 +1,5 @@
 /**
- * Checks user credentials and compares them with the user in the database.
+ * Creates a new user if the introduced email is not in use
  * 
  * @param {string} email The user e-mail. 
  * @param {string} password The user password.
