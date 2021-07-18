@@ -1,7 +1,7 @@
 const { env: { SECRET } } = process
 
 const { Router } = require('express')
-const { registerAdmin, authenticateAdmin, confirmSession } = require('./handlers')
+const { authenticateUser, confirmSession, registerUser } = require('./handlers')
 const bodyParser = require('body-parser')
 const { jwtVerifierExtractor } = require('../middlewares')
 const { handleError } = require('../helpers')
@@ -11,11 +11,12 @@ const verifyExtractJwt = jwtVerifierExtractor(SECRET, handleError)
 
 const api = new Router()
 
-api.post('/admins', parseBody, registerAdmin)
 
-api.post('/admins/auth', parseBody, authenticateAdmin)
+api.post('/users', parseBody, registerUser)
 
-api.post('/admins/auth/confirm', verifyExtractJwt, confirmSession)
+api.post('/users/auth', parseBody, authenticateUser)
+
+api.post('/users/auth/confirm', verifyExtractJwt, confirmSession)
 
 module.exports = {
     api

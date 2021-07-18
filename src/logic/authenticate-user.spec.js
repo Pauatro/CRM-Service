@@ -1,24 +1,22 @@
 require('dotenv').config()
 
 const { env: { TEST_MONGODB_URL: MONGODB_URL } } = process
-
-const authenticateAdmin = require('./authenticate-admin')
+const authenticateUser = require('./authenticate-user')
 const { random } = Math
 const { expect } = require('chai')
-require('commons/polyfills/json')
-const { mongoose, models: { Admin } } = require('../data')
+require('../commons/polyfills/json')
+const { mongoose, models: { User }, configs: {userStatuses}  } = require('../data')
 const bcrypt = require('bcryptjs')
-const { errors: { UnexistenceError, VoidError, CredentialsError } } = require('../commons')
+const { errors: { NonExistenceError, VoidError, CredentialsError } } = require('../commons')
 
-describe('server logic - authenticate admin', () => {
+describe('server logic - authenticate user', () => {
     before(() => mongoose.connect(MONGODB_URL))
 
-    let username, email, password, adminId, hash
+    let email, password, userId, hash
 
     beforeEach(() =>
-        Admin.deleteMany()
+        User.deleteMany()
             .then(() => {
-                username = `username-${random()}`
                 email = `e-${random()}@mail.com`
                 password = `password-${random()}`
 
@@ -27,21 +25,21 @@ describe('server logic - authenticate admin', () => {
             .then(_hash => hash = _hash)
     )
 
-    describe('when admin already exists', () => {
+    describe('when user already exists', () => {
         beforeEach(() =>
-            Admin.create({ username, email, password: hash })
-                .then(admin => adminId = admin.id)
+            User.create({ email, password: hash, status: userStatuses.user })
+                .then(user => userId = user.id)
         )
 
         it('should succeed on correct credentials', () =>
-            authenticateAdmin(email, password)
-                .then(_adminId => expect(_adminId).to.equal(adminId))
+            authenticateUser(email, password)
+                .then(_userId => expect(_userId).to.equal(userId))
         )
 
         it('should fail on wrong password', () => {
             password += 'wrong-'
 
-            return authenticateAdmin(email, password)
+            return authenticateUser(email, password)
                 .catch(error => {
                     expect(error).to.be.an.instanceof(CredentialsError)
                     expect(error.message).to.equal(`wrong password`)
@@ -49,18 +47,18 @@ describe('server logic - authenticate admin', () => {
         })
     })
 
-    it('should fail when admin does not exist', () =>
-        authenticateAdmin(email, password)
+    it('should fail when user does not exist', () =>
+        authenticateUser(email, password)
             .catch(error => {
-                expect(error).to.be.an.instanceof(UnexistenceError)
-                expect(error.message).to.equal(`Admin with e-mail ${email} does not exist`)
+                expect(error).to.be.an.instanceof(NonExistenceError)
+                expect(error.message).to.equal(`user with e-mail ${email} does not exist`)
             })
-    )
+    ).timeout(5000)
 
     it('should fail when inputs with incorrect format are introduced', async () => {
 
         try {
-            authenticateAdmin( "", password)
+            authenticateUser( "", password)
 
         } catch (error) {
             expect(error).to.exist
@@ -70,7 +68,7 @@ describe('server logic - authenticate admin', () => {
         }
 
         try {
-            authenticateAdmin( email, "")
+            authenticateUser( email, "")
 
         } catch (error) {
             expect(error).to.exist
@@ -80,7 +78,7 @@ describe('server logic - authenticate admin', () => {
         }
 
         try {
-            authenticateAdmin( [""], password)
+            authenticateUser( [""], password)
 
         } catch (error) {
             expect(error).to.exist
@@ -90,7 +88,7 @@ describe('server logic - authenticate admin', () => {
         }
 
         try {
-            authenticateAdmin( email, [""])
+            authenticateUser( email, [""])
 
         } catch (error) {
             expect(error).to.exist
@@ -100,7 +98,7 @@ describe('server logic - authenticate admin', () => {
         }
     })
 
-    afterEach(() => Admin.deleteMany())
+    afterEach(() => User.deleteMany())
 
     after(mongoose.disconnect)
 })

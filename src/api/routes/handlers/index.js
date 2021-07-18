@@ -1,5 +1,5 @@
 module.exports = {
-    registerAdmin: require('./register-admin'),
-    authenticateAdmin: require('./authenticate-admin'),
+    registerUser: require('./register-user'),
+    authenticateUser: require('./authenticate-user'),
     confirmSession: require('./confirm-session')
 }

@@ -1,5 +1,6 @@
 module.exports = {
     context: require('./context'),
-    registerAdmin: require('./register-admin'),
-    authenticateAdmin: require('./authenticate-admin')
+    registerUser: require('./register-user'),
+    deleteUser: require('./delete-user'),
+    authenticateUser: require('./authenticate-user')
 }
