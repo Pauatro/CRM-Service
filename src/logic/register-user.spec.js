@@ -54,7 +54,6 @@ describe('server logic - register user', () => {
             try {
                 await registerUser(email, password, userStatuses['user'])
             } catch (error) {
-                console.log(error)
                 expect(error).to.exist
 
                 expect(error).to.be.an.instanceof(DuplicityError)
