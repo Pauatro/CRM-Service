@@ -1,4 +1,4 @@
-const { errors: { DuplicityError, VoidError, UnexistenceError, CredentialsError } } = require('../../commons')
+const { errors: { DuplicityError, VoidError, NonExistenceError, CredentialsError } } = require('../../commons')
 const { JsonWebTokenError } = require('jsonwebtoken')
 
 module.exports = function (error, res) {
@@ -8,7 +8,7 @@ module.exports = function (error, res) {
         case error instanceof TypeError || error instanceof VoidError:
             status = 406
             break
-        case error instanceof DuplicityError || error instanceof UnexistenceError:
+        case error instanceof DuplicityError || error instanceof NonExistenceError:
             status = 409
             break
         case error instanceof CredentialsError || error instanceof JsonWebTokenError:

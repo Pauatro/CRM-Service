@@ -2,65 +2,69 @@ require('dotenv').config()
 
 const { env: { TEST_MONGODB_URL: MONGODB_URL } } = process
 
-const registerAdmin = require('./register-admin')
+const registerUser = require('./register-user')
 const { random } = Math
 const { expect } = require('chai')
 require('../commons/polyfills/json')
-const { mongoose, models: { Admin } } = require('data')
+const { mongoose, configs: {userStatuses}, models: { User } } = require('../data')
 const bcrypt = require('bcryptjs')
 
 const { errors: { DuplicityError, VoidError } } = require('../commons')
 
-describe('server logic - register admin', () => {
+describe('server logic - register user', () => {
     before(() => mongoose.connect(MONGODB_URL))
 
-    let username, email, password
+    let email, password
 
     beforeEach(async () => {
-        await Admin.deleteMany()
+        await User.deleteMany()
 
-        username = `username-${random()}`
         email = `e-${random()}@mail.com`
         password = `password-${random()}`
     })
 
-    it('should succeed on valid data', async () => {
-        const result = await registerAdmin(username, email, password)
+    const statusesList = Object.values(userStatuses)
 
-        expect(result).to.be.undefined
+    for (const i in statusesList){
+        it('should succeed on valid data for all potential user statuses', async () => {
 
-        const admins = await Admin.find()
+            const result = await registerUser(email, password, statusesList[i])
+    
+            expect(result).to.be.undefined
+    
+            const users = await User.find()
+    
+            expect(users.length).to.equal(1)
+    
+            const [user] = users
+    
+            expect(user.email).to.equal(email)
+            expect(user.status).to.equal(statusesList[i])
+    
+            const match = await bcrypt.compare(password, user.password)
+    
+            expect(match).to.be.true
+        }).timeout(5000)
+    }
+        
+    describe('when user already exists', () => {
+        beforeEach(() => User.create({ email, password, status: userStatuses['user'] }))
 
-        expect(admins.length).to.equal(1)
-
-        const [admin] = admins
-
-        expect(admin.username).to.equal(username)
-        expect(admin.email).to.equal(email)
-
-        const match = await bcrypt.compare(password, admin.password)
-
-        expect(match).to.be.true
-    })
-
-    describe('when admin already exists', () => {
-        beforeEach(() => Admin.create({ username, email, password }))
-
-        it('should fail on trying to register an existing admin', async () => {
+        it('should fail on trying to register an existing user', async () => {
             try {
-                await registerAdmin(username, email, password)
+                await registerUser(email, password, userStatuses['user'])
             } catch (error) {
                 expect(error).to.exist
 
                 expect(error).to.be.an.instanceof(DuplicityError)
-                expect(error.message).to.equal(`${email} is already in use`)
+                expect(error.message).to.equal('Invalid Email')
             }
         })
     })
 
     it('should fail when inputs with incorrect format are introduced', async () => {
         try {
-            registerAdmin("", email, password)
+            registerUser(email, password, "")
 
         } catch (error) {
             expect(error).to.exist
@@ -70,7 +74,7 @@ describe('server logic - register admin', () => {
         }
 
         try {
-            registerAdmin(username, "", password)
+            registerUser("", password, userStatuses['user'])
 
         } catch (error) {
             expect(error).to.exist
@@ -80,7 +84,7 @@ describe('server logic - register admin', () => {
         }
 
         try {
-            registerAdmin(username, email, "")
+            registerUser(email, "", userStatuses['user'])
 
         } catch (error) {
             expect(error).to.exist
@@ -90,7 +94,7 @@ describe('server logic - register admin', () => {
         }
 
         try {
-            registerAdmin([], email, password)
+            registerUser(email, password, [])
 
         } catch (error) {
             expect(error).to.exist
@@ -100,7 +104,7 @@ describe('server logic - register admin', () => {
         }
 
         try {
-            registerAdmin(username, [""], password)
+            registerUser([""], password, userStatuses['user'])
 
         } catch (error) {
             expect(error).to.exist
@@ -110,17 +114,27 @@ describe('server logic - register admin', () => {
         }
 
         try {
-            registerAdmin(username, email, [""])
+            registerUser(email, password, [""])
 
         } catch (error) {
             expect(error).to.exist
 
             expect(error).to.be.an.instanceof(TypeError)
             expect(error.message).to.equal(` is not a string`)
+        }
+
+        try {
+            registerUser(email, password, "something")
+
+        } catch (error) {
+            expect(error).to.exist
+
+            expect(error).to.be.an.instanceof(TypeError)
+            expect(error.message).to.equal(`input something is not part of the allowed list`)
         }
     })
 
-    afterEach(() => Admin.deleteMany())
+    afterEach(() => User.deleteMany())
 
     after(mongoose.disconnect)
 })

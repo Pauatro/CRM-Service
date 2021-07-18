@@ -1,5 +1,8 @@
 module.exports = {
-    registerAdmin: require('./register-admin'),
-    authenticateAdmin: require('./authenticate-admin'),
-    confirmSession: require('./confirm-session')
+    registerUser: require('./register-user'),
+    authenticateUser: require('./authenticate-user'),
+    deleteUser: require('./delete-user'),
+    confirmSession: require('./confirm-session'),
+    retrieveAllUsers: require('./retrieve-all-users'),
+    updateUserStatus: require('./update-user-status')
 }
