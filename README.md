@@ -17,3 +17,10 @@ TEST_MONGODB_URL: a string with the mongoDB database uri you want to use
 3. Start the API
 
 ``` node . ```
+
+
+**Testing the API**
+
+All unit tests will be run using the following command:
+
+``` npm test ```

@@ -5,14 +5,16 @@
   "main": "index.js",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "chai": "^4.3.4",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
+    "mocha": "^9.0.2",
     "mongoose": "^5.13.3"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha src/logic/*.spec.js --timeout 15000"
   },
   "repository": {
     "type": "git",

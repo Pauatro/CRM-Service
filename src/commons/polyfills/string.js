@@ -51,3 +51,10 @@ String.validate.isISODate = function (string){
     
     if (!String.isISOString(string)) throw new TypeError(`${string} is not a valid ISO Date`)
 }.bind(String)
+
+String.validate.isInList = function (string, stringList){
+    this.validate.notVoid(string)
+    if (!Array.isArray(stringList))throw new TypeError(`stringList must be an array of strings`)
+    
+    if (!(stringList.includes(string))) throw new TypeError(`input ${string} is not part of the allowed list`)
+}.bind(String)
