@@ -21,7 +21,7 @@ module.exports = (id, status) => {
     String.validate.isInList(status, Object.values(userStatuses))
     
     return (async () => {
-        const user = await User.find({ id })
+        const user = await User.findById(id)
 
         if (!user) throw new NonExistenceError(`the requested user does not exist`)
 

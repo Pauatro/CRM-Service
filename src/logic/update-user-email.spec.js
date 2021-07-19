@@ -2,18 +2,18 @@ require('dotenv').config()
 
 const { env: { TEST_MONGODB_URL: MONGODB_URL } } = process
 
-const updateUserStatus = require('./update-user-status')
+const updateUserEmail = require('./update-user-email')
 const { random } = Math
 const { expect } = require('chai')
 require('../commons/polyfills/json')
-const { mongoose, models: { User }, configs: {userStatuses} } = require('../data')
+const { mongoose, models: { User }, configs: { userStatuses } } = require('../data')
 const bcrypt = require('bcryptjs')
-const { errors: { NonExistenceError, VoidError } } = require('../commons')
+const { errors: { NonExistenceError, VoidError, DuplicityError } } = require('../commons')
 
-describe('server logic - update user status', () => {
+describe('server logic - update user email', () => {
     before(() => mongoose.connect(MONGODB_URL))
 
-    let email, password, hash, status, userId
+    let email, password, hash, status
 
     beforeEach(() =>
         User.deleteMany()
@@ -35,19 +35,29 @@ describe('server logic - update user status', () => {
 
         it('should succeed on correct inputs', () =>
             (async ()=>{
-                await updateUserStatus(userId, userStatuses.admin)
+
+                const newEmail = 'heyamail@email.com'
+                await updateUserEmail(userId, newEmail)
                     
                 const user = await User.findById(userId)
 
                 expect(user).to.exist
-                expect(user.status).to.equal(userStatuses.admin)
+                expect(user.email).to.equal(newEmail)
             })()
 
+        )
+
+        it('should fail when the email is already in use', () =>
+            updateUserEmail( userId, email)
+                .catch(error => {
+                    expect(error).to.be.an.instanceof(DuplicityError)
+                    expect(error.message).to.equal(`${email} is already in use`)
+                })
         )
     })
 
     it('should fail when user does not exist', () =>
-        updateUserStatus( "5edfd817d242780ac65bc59c", userStatuses.admin)
+        updateUserEmail( "5edfd817d242780ac65bc59c", 'heymail@email.com')
             .catch(error => {
                 expect(error).to.be.an.instanceof(NonExistenceError)
                 expect(error.message).to.equal(`the requested user does not exist`)
@@ -55,8 +65,9 @@ describe('server logic - update user status', () => {
     )
 
     it('should fail when inputs with incorrect format are introduced', async () => {
+
         try {
-            updateUserStatus("", userStatuses.admin)
+            updateUserEmail("", 'email@email.com')
 
         } catch (error) {
             expect(error).to.exist
@@ -66,7 +77,7 @@ describe('server logic - update user status', () => {
         }
 
         try {
-            updateUserStatus("5edfd817d242780ac65bc59c", "")
+            updateUserEmail("5edfd817d242780ac65bc59c", "")
 
         } catch (error) {
             expect(error).to.exist
@@ -76,13 +87,13 @@ describe('server logic - update user status', () => {
         }
 
         try {
-            updateUserStatus("5edfd817d242780ac65bc59c", "something")
+            updateUserEmail("5edfd817d242780ac65bc59c", '@')
 
         } catch (error) {
             expect(error).to.exist
 
-            expect(error).to.be.an.instanceof(TypeError)
-            expect(error.message).to.equal(`input something is not part of the allowed list`)
+            expect(error).to.be.an.instanceof(Error)
+            expect(error.message).to.equal(`@ is not an e-mail`)
         }
     })
 
