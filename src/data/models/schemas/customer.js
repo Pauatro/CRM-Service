@@ -19,6 +19,5 @@ module.exports = new Schema({
     },
     lastModifiedBy: {
         type: String,
-        required: true
     },
 })
