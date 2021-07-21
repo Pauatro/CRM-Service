@@ -44,7 +44,7 @@ describe('server logic - register user', () => {
             const match = await bcrypt.compare(password, user.password)
     
             expect(match).to.be.true
-        }).timeout(5000)
+        })
     }
         
     describe('when user already exists', () => {

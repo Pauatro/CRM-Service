@@ -53,8 +53,7 @@ describe('server logic - authenticate user', () => {
                 expect(error).to.be.an.instanceof(NonExistenceError)
                 expect(error.message).to.equal(`user with e-mail ${email} does not exist`)
             })
-    ).timeout(5000)
-
+    )
     it('should fail when inputs with incorrect format are introduced', async () => {
 
         try {
