@@ -8,7 +8,6 @@ module.exports = (secret, errorHandler) =>
             jwtPromised.verify(token, secret)
                 .then(payload => {
                     req.payload = payload
-
                     next()
                 })
                 .catch(error => errorHandler(error, res))

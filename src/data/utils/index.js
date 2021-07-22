@@ -1,3 +1,4 @@
 module.exports = {
-    cleanId: require('./cleanId')
+    cleanId: require('./cleanId'),
+    cleanSample: require('./cleanSample')
 }

@@ -15,7 +15,7 @@ const {
 } = require('../commons');
 const {
 	models: { Customer },
-	utils: { cleanId }
+	utils: { cleanSample }
 } = require('../data');
 
 module.exports = (id) => {
@@ -27,6 +27,6 @@ module.exports = (id) => {
 		if (!customer)
 			throw new NonExistenceError(`the requested customer does not exist`);
 
-        return cleanId(customer)
+        return cleanSample(customer)
 	})();
 };
