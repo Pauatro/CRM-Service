@@ -6,6 +6,7 @@ module.exports = {
     updateUserStatus: require('./update-user-status'),
     updateUserEmail: require('./update-user-email'),
     retrieveAllUsers: require('./retrieve-all-users'),
+    retrieveUserById: require('./retrieve-user-by-id'),
     registerCustomer: require('./register-customer'),
     deleteCustomer: require('./delete-customer'),
     updateCustomer: require('./update-customer'),

@@ -1,6 +1,7 @@
 const { utils: { jwtPromised } } = require('../../commons')
+const { handleError } = require('../helpers');
 
-module.exports = (secret, errorHandler) =>
+module.exports = (secret) =>
     (req, res, next) => {
         try {
             const [, token] = req.header('authorization').split(' ')
@@ -10,8 +11,8 @@ module.exports = (secret, errorHandler) =>
                     req.payload = payload
                     next()
                 })
-                .catch(error => errorHandler(error, res))
+                .catch(error => handleError(error, res))
         } catch (error) {
-            errorHandler(error, res)
+            handleError(error, res)
         }
     }

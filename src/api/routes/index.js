@@ -1,7 +1,6 @@
 const {
 	env: { SECRET },
 } = process;
-
 const express = require('express');
 const { Router } = express;
 const {
@@ -16,21 +15,54 @@ const {
 	deleteCustomer,
 	updateCustomer,
 	retrieveAllCustomers,
-	retrieveCustomerById
+	retrieveCustomerById,
 } = require('./handlers');
-const { jwtVerifierExtractor } = require('../middlewares');
-const { handleError } = require('../helpers');
+const {
+	jwtVerifierExtractor,
+	rolePermissionsChecker,
+} = require('../middlewares');
+const { actions } = require('../configs');
 
 const parseBody = express.json();
-const verifyExtractJwt = jwtVerifierExtractor(SECRET, handleError);
+const verifyExtractJwt = jwtVerifierExtractor(SECRET);
 
 const api = new Router();
 
-api.post('/users', parseBody, registerUser);
-api.get('/users', parseBody, retrieveAllUsers);
-api.delete('/users/:id', parseBody, deleteUser);
-api.put('/users/:id/status', parseBody, updateUserStatus);
-api.put('/users/:id', parseBody, updateUserEmail);
+api.post(
+	'/users',
+	verifyExtractJwt,
+	parseBody,
+	rolePermissionsChecker(actions.registerUser),
+	registerUser
+);
+api.get(
+	'/users',
+	verifyExtractJwt,
+	parseBody,
+	rolePermissionsChecker(actions.retrieveAllUsers),
+	retrieveAllUsers
+);
+api.delete(
+	'/users/:id',
+	verifyExtractJwt,
+	parseBody,
+	rolePermissionsChecker(actions.deleteUser),
+	deleteUser
+);
+api.put(
+	'/users/:id/status',
+	verifyExtractJwt,
+	parseBody,
+	rolePermissionsChecker(actions.updateUserStatus),
+	updateUserStatus
+);
+api.put(
+	'/users/:id',
+	verifyExtractJwt,
+	parseBody,
+	rolePermissionsChecker(actions.updateUserEmail),
+	updateUserEmail
+);
 api.post('/users/auth', parseBody, authenticateUser);
 api.post('/users/auth/confirm', verifyExtractJwt, confirmSession);
 

@@ -1,6 +1,6 @@
 require('dotenv').config()
 
-const { env:  {TEST_MONGODB_URL: MONGODB_URL, PORT_CLI} } = process
+const { env:  {MONGODB_URL, PORT_CLI} } = process
 const PORT = PORT_CLI 
 
 const path = require('path')
