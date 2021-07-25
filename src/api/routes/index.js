@@ -16,6 +16,7 @@ const {
 	updateCustomer,
 	retrieveAllCustomers,
 	retrieveCustomerById,
+	updateCustomerPhoto,
 } = require('./handlers');
 const {
 	jwtVerifierExtractor,
@@ -71,6 +72,7 @@ api.delete('/customers/:id', verifyExtractJwt, parseBody, deleteCustomer);
 api.put('/customers/:id', verifyExtractJwt, parseBody, updateCustomer);
 api.get('/customers', verifyExtractJwt, parseBody, retrieveAllCustomers);
 api.get('/customers/:id', verifyExtractJwt, parseBody, retrieveCustomerById);
+api.put('/customers/:id/photos/', verifyExtractJwt, updateCustomerPhoto)
 
 module.exports = {
 	api,

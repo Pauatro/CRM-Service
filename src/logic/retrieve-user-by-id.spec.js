@@ -46,7 +46,6 @@ describe('server logic - retrieve user by id', () => {
 					return;
 				})
 				.catch((error) => {
-                    console.log(error.message)
                     expect(error).to.not.exist; 
                     return;
                 });

@@ -10,6 +10,7 @@ module.exports = {
     registerCustomer: require('./register-customer'),
     deleteCustomer: require('./delete-customer'),
     updateCustomer: require('./update-customer'),
+    updateCustomerPhoto: require('./update-customer-photo'),
     retrieveAllCustomers: require('./retrieve-all-customers'),
     retrieveCustomerById: require('./retrieve-customer-by-id'),
 }

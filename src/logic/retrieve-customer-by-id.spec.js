@@ -62,7 +62,6 @@ describe('server logic - retrieve customer by id', () => {
 					return;
 				})
 				.catch((error) => {
-                    console.log(error.message)
                     expect(error).to.not.exist; 
                     return;
                 });

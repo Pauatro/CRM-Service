@@ -1,3 +1,4 @@
 module.exports = {
-    userStatuses: require('./userStatuses')
+    userStatuses: require('./userStatuses'),
+    s3ObjectTags: require('./s3ObjectTags')
 }
