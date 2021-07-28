@@ -16,7 +16,7 @@ https://docs.atlas.mongodb.com/tutorial/create-new-cluster/
 S3:
 https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html
 
-Para poder acceder a las imágenes a través de la URL, el bucket y la cuenta de s3 tienen que tener el bloqueo de accesos públicos desactivado y el bucket debe incluir la siguiente policy:
+To access images directly via the URL, both the bucket and the account need to have the public access blockage turned off. The bucked should include the following policy: 
 
 ```
 {
@@ -37,7 +37,7 @@ Para poder acceder a las imágenes a través de la URL, el bucket y la cuenta de
 }
 ```
 
-De esta manera, solamente se hacen públicas las imágenes que subimos con el tag "public=yes"
+This way, only images uploaded with the tag "public=yes" will be publically available.
 
 3. Generate .env file in the main folder wih the following variables:
 
