@@ -16,6 +16,29 @@ https://docs.atlas.mongodb.com/tutorial/create-new-cluster/
 S3:
 https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html
 
+Para poder acceder a las imágenes a través de la URL, el bucket y la cuenta de s3 tienen que tener el bloqueo de accesos públicos desactivado y el bucket debe incluir la siguiente policy:
+
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::crm-service-images-test/*",
+            "Condition": {
+                "StringEquals": {
+                    "s3:ExistingObjectTag/public": "yes"
+                }
+            }
+        }
+    ]
+}
+```
+
+De esta manera, solamente se hacen públicas las imágenes que subimos con el tag "public=yes"
+
 3. Generate .env file in the main folder wih the following variables:
 
 PORT_CLI: the local port where you want to start the API
