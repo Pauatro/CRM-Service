@@ -12,7 +12,6 @@
  */
 
 require('../commons/polyfills/string');
-require('../commons/polyfills/json');
 const {
 	errors: { NonExistenceError, DuplicityError },
 	utils: { Email },

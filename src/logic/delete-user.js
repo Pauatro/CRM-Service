@@ -9,7 +9,6 @@
  */
 
 require('../commons/polyfills/string')
-require('../commons/polyfills/json')
 const { errors: { NonExistenceError } } = require('../commons')
 const { models: { User } } = require('../data')
 

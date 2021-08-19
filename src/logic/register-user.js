@@ -12,7 +12,6 @@
  */
 
 require('../commons/polyfills/string')
-require('../commons/polyfills/json')
 const { utils: { Email }, errors: { DuplicityError } } = require('../commons')
 const { configs: { userStatuses }, models: { User } } = require('../data')
 const bcrypt = require('bcryptjs')

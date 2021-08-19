@@ -10,7 +10,6 @@
  */
 
 require('../commons/polyfills/string');
-require('../commons/polyfills/json');
 const {
 	utils: { Email },
 	errors: { NonExistenceError },

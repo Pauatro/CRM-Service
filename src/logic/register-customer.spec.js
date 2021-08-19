@@ -7,7 +7,6 @@ const {
 const registerCustomer = require('./register-customer');
 const { random } = Math;
 const { expect } = require('chai');
-require('../commons/polyfills/json');
 const {
 	mongoose,
 	configs: { userStatuses },

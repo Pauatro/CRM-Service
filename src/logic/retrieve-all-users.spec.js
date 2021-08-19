@@ -4,7 +4,6 @@ const { env: { TEST_MONGODB_URL: MONGODB_URL } } = process
 const retrieveAllUsers = require('./retrieve-all-users')
 const { random } = Math
 const { expect } = require('chai')
-require('../commons/polyfills/json')
 const { mongoose, models: { User }, configs: { userStatuses }  } = require('../data')
 const bcrypt = require('bcryptjs')
 

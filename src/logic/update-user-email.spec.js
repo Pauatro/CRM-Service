@@ -5,7 +5,6 @@ const { env: { TEST_MONGODB_URL: MONGODB_URL } } = process
 const updateUserEmail = require('./update-user-email')
 const { random } = Math
 const { expect } = require('chai')
-require('../commons/polyfills/json')
 const { mongoose, models: { User }, configs: { userStatuses } } = require('../data')
 const bcrypt = require('bcryptjs')
 const { errors: { NonExistenceError, VoidError, DuplicityError } } = require('../commons')

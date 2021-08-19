@@ -6,7 +6,6 @@ const {
 const retrieveUserById = require('./retrieve-user-by-id');
 const { random } = Math;
 const { expect } = require('chai');
-require('../commons/polyfills/json');
 const {
 	mongoose,
 	models: { User },

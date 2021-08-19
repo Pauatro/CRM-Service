@@ -7,7 +7,6 @@ const {
 const updateCustomerImage = require('./update-customer-photo');
 const { random } = Math;
 const { expect } = require('chai');
-require('../commons/polyfills/json');
 const {
 	mongoose,
 	models: { User, Customer },

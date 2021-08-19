@@ -6,7 +6,6 @@ const {
 const retrieveCustomerById = require('./retrieve-customer-by-id');
 const { random } = Math;
 const { expect } = require('chai');
-require('../commons/polyfills/json');
 const {
 	mongoose,
 	models: { User, Customer },

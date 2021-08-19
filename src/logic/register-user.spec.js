@@ -5,7 +5,6 @@ const { env: { TEST_MONGODB_URL: MONGODB_URL } } = process
 const registerUser = require('./register-user')
 const { random } = Math
 const { expect } = require('chai')
-require('../commons/polyfills/json')
 const { mongoose, configs: {userStatuses}, models: { User } } = require('../data')
 const bcrypt = require('bcryptjs')
 

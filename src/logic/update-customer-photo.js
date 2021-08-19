@@ -1,5 +1,4 @@
 require('../commons/polyfills/string');
-require('../commons/polyfills/json');
 const fsPromises = require('fs').promises;
 const {
 	errors: { NonExistenceError },
