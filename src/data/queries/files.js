@@ -2,7 +2,7 @@ const { env: { S3_BUCKET_NAME } } = process
 const s3 = require('../s3')
 const fs = require('fs')
 
-module.exports = (path, filename, tags) => {
+const uploadFile  =  (path, filename, tags) => {
     String.validate.notVoid(path)
     String.validate.notVoid(filename)
 
@@ -17,3 +17,19 @@ module.exports = (path, filename, tags) => {
 
 	return s3.upload(uploadParams).promise();
 };
+
+const deleteFile = (filename)=>{
+    String.validate.notVoid(filename)
+
+    const uploadParams = {
+        Bucket: S3_BUCKET_NAME,
+        Key: filename
+    }
+
+    return s3.deleteObject(uploadParams).promise()
+}
+
+module.exports = {
+    deleteFile,
+    uploadFile
+}

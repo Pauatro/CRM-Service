@@ -10,16 +10,16 @@
 
 require('../commons/polyfills/string')
 const { errors: { NonExistenceError } } = require('../commons')
-const { models: { User } } = require('../data')
+const { queries: { findUserById, deleteUserById } } = require('../data')
 
 module.exports = (id) => {
     String.validate.notVoid(id)
 
     return (async () => {
-        const user = await User.findById(id)
+        const user = await findUserById(id)
 
         if (!user) throw new NonExistenceError(`the requested user does not exist`)
 
-        await User.deleteOne({_id: id})
+        await deleteUserById(id)
     })()
 }

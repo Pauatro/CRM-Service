@@ -11,13 +11,11 @@
 
 require('../commons/polyfills/string');
 const {
-	utils: { Email },
 	errors: { NonExistenceError },
 } = require('../commons');
 const {
-	models: { User, Customer },
+	queries: { findUserById, createCustomer },
 } = require('../data');
-const bcrypt = require('bcryptjs');
 
 module.exports = (name, surname, userId) => {
 	String.validate.notVoid(name);
@@ -25,11 +23,11 @@ module.exports = (name, surname, userId) => {
 	String.validate.notVoid(userId);
 
 	return (async () => {
-		const user = await User.findById(userId);
+		const user = await findUserById(userId);
 
 		if (!user) throw new NonExistenceError(`User with introduced id does not exist`);
 
-		await Customer.create({ name, surname, createdBy: userId });
+		await createCustomer(name, surname, userId);
 		return;
 	})();
 };

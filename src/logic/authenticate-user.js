@@ -12,7 +12,7 @@
  */
 
 require('../commons/polyfills/string')
-const { models: { User } } = require('../data')
+const { queries: { findUserByEmail } } = require('../data')
 const { utils: { Email }, errors: { NonExistenceError, CredentialsError } } = require('../commons')
 const bcrypt = require('bcryptjs')
 
@@ -22,7 +22,7 @@ module.exports = (email, password) => {
     String.validate.notVoid(password)
 
     return (async () => {
-        const user = await User.findOne({ email })
+        const user = await findUserByEmail(email)
 
         if (!user) throw new NonExistenceError(`user with e-mail ${email} does not exist`)
 

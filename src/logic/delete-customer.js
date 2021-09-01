@@ -12,16 +12,16 @@
 require('../commons/polyfills/string')
 require('../commons/polyfills/json')
 const { errors: { NonExistenceError } } = require('../commons')
-const { models: { Customer } } = require('../data')
+const { queries: {findCustomerById, deleteCustomerById} } = require('../data')
 
 module.exports = (id) => {
     String.validate.notVoid(id)
 
     return (async () => {
-        const customer = await Customer.findById(id)
+        const customer = await findCustomerById(id)
 
         if (!customer) throw new NonExistenceError(`the requested customer does not exist`)
 
-        await Customer.deleteOne({_id: id})
+        await deleteCustomerById(id)
     })()
 }
