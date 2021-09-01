@@ -6,7 +6,7 @@ module.exports = function (error, res) {
 
     switch (true) {
         case error instanceof TypeError || error instanceof VoidError:
-            status = 406
+            status = 400
             break
         case error instanceof DuplicityError || error instanceof NonExistenceError:
             status = 409
@@ -15,6 +15,5 @@ module.exports = function (error, res) {
             status = 401
             break
     }
-
-    res.status(status).json({ error: error.message })
+    res.status(status)
 }
